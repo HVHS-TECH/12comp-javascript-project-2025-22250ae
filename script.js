@@ -14,18 +14,29 @@ function setup() {
 	
 	floor = new Sprite(720, GameHeight, GameWidth, 50, 'k');
 
+	asteroidGroup = new Group();
 	for (i = 0; i < 10; i++) {
-		asteroid = new Sprite(random(0, 1440), 0);
-		asteroid.vel.x = 0;
-		asteroid.vel.y = 0;
-		asteroid.bounciness = 0.5;
-		asteroid.friction = 100;
+		MakeAsteroid();
 	  }
+	 
 
 }
+function MakeAsteroid() {
+	asteroid = new Sprite(random(0, 1440), 0);
+	asteroid.vel.x = 0;
+	asteroid.vel.y = 0;
+	asteroid.bounciness = 0.5;
+	asteroid.friction = 100;
+	asteroidGroup.add(asteroid);
+}
 function draw() {
-
+	function func2Call(asteroid, floor) {
+		asteroid.remove();
+		}
+		
 	background('black'); 
+
+	asteroidGroup.collides(floor, func2Call);
 
 if (kb.pressing('left')) {
    player.vel.x = -5;
