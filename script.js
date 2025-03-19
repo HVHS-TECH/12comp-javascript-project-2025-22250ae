@@ -1,7 +1,6 @@
 const GameWidth = 1440;
 const GameHeight = 803;
-let asteroidspawn
-let triggered = false;
+let time = 0
 function setup() {
 	console.log("setup: ");
 
@@ -27,20 +26,22 @@ function spawnasteroid() {
  MakeAsteroid();
 }
 function MakeAsteroid() {
-	asteroid = new Sprite(random(0, 1440), 0);
+	
+	asteroid = new Sprite(random(0, 1440), -50, random(30, 100), 'd');
 	asteroid.vel.x = (random(-10, 10));
 	asteroid.vel.y = (random(0, 10));
 	asteroidGroup.add(asteroid);
+    
+	
 }
 
 function draw() {
-	let elapsedTime = millis() - asteroidspawn;
+	time++;
 
-	if (elapsedTime = 10000 && !triggered) {
-		triggered = true;
+	if (time == 10) {
+		
 		MakeAsteroid();
-		elapsedTime = asteroidspawn
-		triggered = false;
+		time = 0;
 	  }
  
 	
