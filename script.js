@@ -1,6 +1,7 @@
 const GameWidth = 1440;
 const GameHeight = 803;
 let time = 0
+let Highscore = 0
 function setup() {
 	console.log("setup: ");
 
@@ -20,7 +21,6 @@ function setup() {
 	wall2 = new Sprite(-60, 401, 50, 1500, 'k');
 
 	asteroidGroup = new Group();
-     
 }
 function spawnasteroid() {
  MakeAsteroid();
@@ -36,8 +36,10 @@ function MakeAsteroid() {
 }
 
 function draw() {
+	background(220); 
 	time++;
-
+	textSize(32);
+	text(('Score: ')+Highscore, 100, 100);
 	if (time == 10) {
 		
 		MakeAsteroid();
@@ -47,10 +49,11 @@ function draw() {
 	
 	function func2Call(asteroid, floor) {
 		asteroid.remove();
+		Highscore++;
 		}
 
 	
-	background(220); 
+
 //
 	asteroidGroup.collides(floor, func2Call);
 	asteroidGroup.collides(wall1, func2Call);
