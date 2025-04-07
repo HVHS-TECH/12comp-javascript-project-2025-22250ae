@@ -5,7 +5,7 @@ const GameHeight = 803;
 let time = 0
 let Score = 0
 let Highscore = 0
-let stopgame = false
+let stopgame = true
 function setup() {
 	mouse.visible = false;
 	console.log("setup: ");
@@ -16,7 +16,9 @@ function setup() {
 
 	asteroidspawn = millis();
     
-	player = new Sprite(250, 750, 250, 250, 'd');
+	reset = new Sprite (720, 401, 200, 200, 'k')
+
+	player = new Sprite(250, 750, 100, 100, 'd');
 	player.color = 'Black';
 
 	floor = new Sprite(720, GameHeight, 1600, 50, 'k');
@@ -29,9 +31,9 @@ function setup() {
 
 
 //function to make asteroids
-function MakeAsteroid(_asteroidwidth) {
+function MakeAsteroid(_asteroidradius) {
 	//spawns sprites at a random spot above the visible area of the game
-	asteroid = new Sprite(random(0, 1440), -50, _asteroidwidth, 'd');
+	asteroid = new Sprite(random(0, 1440), -50, (_asteroidradius), 'd');
 	//makes asteroids have random velocity to increase the natural feeling of the game
 	asteroid.vel.x = (random(-10, 10));
 	asteroid.vel.y = (random(0, 10));
@@ -57,33 +59,33 @@ function AsteroidHitFloor(asteroid, floor) {
 //function for when asteroid hits player
 function AsteroidHitPlayer() {
 	//stops the game
+	if (stopgame == false) {
+		reset = new Sprite (720, 401, 200, 200, 'k')
+	}
 	stopgame = true;
-	asteroidGroup.remove
 	//makes mouse visible so you can press reset button
-	mouse.visible = true;
+	
 	//sets the players velocity to 0 on both axis
 	player.vel.x = (0);
 	player.vel.y = (0);
 	for (i=0; i<Score; i++) {
-		console.log (i)
 		MakeBalls();
 	}
-	//spawns in the reset button, resets the score and removes all asteroids
-
-	if (stopgame == false) {
-		reset = new Sprite (720, 401, 200, 200, 'k')
-	}
-	Score = 0;
+	asteroidGroup.removeAll();
 }
 
 
 function draw() {
+	if (stopgame == true) {
+		mouse.visible = true;
+	}
 	//code for when the reset button is pressed, it starts the game again and deletes the reset button
 	if (mouse.pressing() && reset.mouse.hovering()) {
 		stopgame = false;
 		reset.remove();
 		scoregroup.remove();
 		time = 0;
+		Score = 0;
 	}
 	//sets background colour
 	background(220);
