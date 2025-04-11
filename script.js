@@ -1,32 +1,36 @@
 //setting games width and height
-const GameWidth = 1440;
-const GameHeight = 803;
+const GAMEWIDTH = 1440;
+const GAMEHEIGHT = 803;
+const PLAYERWIDTH = 50;
+const PLAYERHEIGHT = 100;
+const BUTTONWIDTH = 400;
+const BUTTONHEIGHT = 150;
 //setting up all the variables for Score, Highscore, Time, and when the game stops
 let time = 0
 let Score = 0
 let Highscore = 0
 let stopgame = true
+let scoregroup;
 function setup() {
 	mouse.visible = false;
 	console.log("setup: ");
-
-	cnv = new Canvas(GameWidth, GameHeight);
+	cnv = new Canvas(GAMEWIDTH, GAMEHEIGHT);
 
 		world.gravity.y = 10;
 
 	asteroidspawn = millis();
     
-	reset = new Sprite (720, 401, 200, 200, 'k')
+	reset = new Sprite (GAMEWIDTH/2, GAMEHEIGHT/3, BUTTONWIDTH, BUTTONHEIGHT, 'k')
 
-	player = new Sprite(250, 750, 100, 100, 'd');
+	player = new Sprite(250, 750, PLAYERWIDTH, PLAYERHEIGHT, 'd');
 	player.color = 'Black';
 
-	floor = new Sprite(720, GameHeight, 1600, 50, 'k');
+	floor = new Sprite(720, GAMEHEIGHT, 1600, 50, 'k');
     wall1 = new Sprite(1500, 401, 50, 1500, 'k');
 	wall2 = new Sprite(-60, 401, 50, 1500, 'k');
 	//creates the groups.
 	asteroidGroup = new Group();
-	scoregroup = new Group();
+	Scoregroup = new Group();
 }
 
 
@@ -42,8 +46,10 @@ function MakeAsteroid(_asteroidradius) {
 }
 function MakeBalls() {
 	//spawns balls
-	ball = new Sprite(720, 100, 50);
-	scoregroup.add(ball);
+	ball = new Sprite(GAMEWIDTH/2, GAMEHEIGHT/3, 50, 'd');
+	ball.vel.x = (random(-10, 10));
+	ball.vel.y = (random(0, 10));
+	Scoregroup.add(ball);
 }
 
 
@@ -59,19 +65,17 @@ function AsteroidHitFloor(asteroid, floor) {
 //function for when asteroid hits player
 function AsteroidHitPlayer() {
 	//stops the game
-	if (stopgame == false) {
-		reset = new Sprite (720, 401, 200, 200, 'k')
-	}
+		reset = new Sprite (GAMEWIDTH/2, GAMEHEIGHT/3, BUTTONWIDTH, BUTTONHEIGHT, 'k')
+		text('Restart', GAMEWIDTH/2, GAMEHEIGHT/3);
 	stopgame = true;
 	//makes mouse visible so you can press reset button
-	
+	asteroidGroup.removeAll();
 	//sets the players velocity to 0 on both axis
 	player.vel.x = (0);
 	player.vel.y = (0);
-	for (i=0; i<Score; i++) {
-		MakeBalls();
+	for (i = 0; i < Score; i++) {
+    	MakeBalls();
 	}
-	asteroidGroup.removeAll();
 }
 
 
@@ -83,7 +87,7 @@ function draw() {
 	if (mouse.pressing() && reset.mouse.hovering()) {
 		stopgame = false;
 		reset.remove();
-		scoregroup.remove();
+		Scoregroup.removeAll();
 		time = 0;
 		Score = 0;
 	}
@@ -95,6 +99,7 @@ function draw() {
 	textSize(32);
 	text('Score: '+Score, 100, 100);
 	text('Highscore: '+Highscore, 100, 200);
+	text('Restart', GAMEWIDTH/2, GAMEHEIGHT/3);
 	//spawns asteroids and resets the time variable every time the time variable reaches 10
 	if (time == 10 && stopgame == false) {
 		MakeAsteroid((random(30, 100)));
@@ -115,14 +120,18 @@ function draw() {
 	//makes the player move using left and right arrow keys, or a and d keys
 	if (kb.pressing('left') && stopgame == false) {
     	player.vel.x = -8;
+		player.rotationSpeed = 0;
 	}
 	if (kb.released('left')) {
     	player.vel.x = 0;
+		player.rotationSpeed = 0;
 	}
 	if (kb.pressing('right') && stopgame == false) {
     	player.vel.x = 8;
+		player.rotationSpeed = 0;
 	}
 	if (kb.released('right')) {
     	player.vel.x = 0;
+		player.rotationSpeed = 0;
 	}
 }
